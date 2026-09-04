@@ -11,6 +11,8 @@ FoodFlow is a working multi-role food delivery application built with Django RES
 
 Core backend apps are `accounts`, `restaurants`, `menu`, `cart`, `coupons`, `orders`, `payments`, `delivery`, `reviews`, `notifications`, and `dashboard`. Complex cart, coupon, order, payment and notification work is kept in service modules and critical writes use database transactions.
 
+For port assignments, daily startup steps, architecture notes, test accounts, and troubleshooting, see [docs/PROJECT_REFERENCE.md](docs/PROJECT_REFERENCE.md).
+
 ## Features
 
 - Email registration/login, JWT access and rotating refresh tokens, token blacklist logout, password validation/change/recovery architecture, profiles, role guards and object ownership checks.
