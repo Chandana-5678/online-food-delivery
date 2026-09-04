@@ -1,0 +1,4323 @@
+openapi: 3.0.3
+info:
+  title: FoodFlow API
+  version: 1.0.0
+  description: Food delivery platform REST API
+paths:
+  /api/auth/addresses/:
+    get:
+      operationId: api_auth_addresses_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAddressList'
+          description: ''
+    post:
+      operationId: api_auth_addresses_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Address'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Address'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/auth/addresses/{id}/:
+    get:
+      operationId: api_auth_addresses_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this address.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+    put:
+      operationId: api_auth_addresses_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this address.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Address'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Address'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+    patch:
+      operationId: api_auth_addresses_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this address.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAddress'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+    delete:
+      operationId: api_auth_addresses_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this address.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/auth/addresses/{id}/set_default/:
+    post:
+      operationId: api_auth_addresses_set_default_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this address.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Address'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Address'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+          description: ''
+  /api/auth/login/:
+    post:
+      operationId: api_auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+          description: ''
+  /api/auth/logout/:
+    post:
+      operationId: api_auth_logout_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Logout'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Logout'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Logout'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Logout'
+          description: ''
+  /api/auth/password/change/:
+    post:
+      operationId: api_auth_password_change_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordChange'
+          description: ''
+  /api/auth/password/forgot/:
+    post:
+      operationId: api_auth_password_forgot_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgotPassword'
+          description: ''
+  /api/auth/profile/:
+    get:
+      operationId: api_auth_profile_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: api_auth_profile_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: api_auth_profile_partial_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/auth/register/:
+    post:
+      operationId: api_auth_register_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Registration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Registration'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Registration'
+          description: ''
+  /api/auth/token/refresh/:
+    post:
+      operationId: api_auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/cart/:
+    get:
+      operationId: api_cart_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+          description: ''
+    delete:
+      operationId: api_cart_destroy
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/cart/coupon/:
+    post:
+      operationId: api_cart_coupon_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyCoupon'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ApplyCoupon'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ApplyCoupon'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApplyCoupon'
+          description: ''
+    delete:
+      operationId: api_cart_coupon_destroy
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/cart/items/:
+    post:
+      operationId: api_cart_items_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCartItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AddCartItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AddCartItem'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddCartItem'
+          description: ''
+  /api/cart/items/{id}/:
+    patch:
+      operationId: api_cart_items_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCartItem'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+          description: ''
+    delete:
+      operationId: api_cart_items_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/categories/:
+    get:
+      operationId: api_categories_list
+      parameters:
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: restaurant
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryList'
+          description: ''
+    post:
+      operationId: api_categories_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/categories/{id}/:
+    get:
+      operationId: api_categories_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    put:
+      operationId: api_categories_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: api_categories_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    delete:
+      operationId: api_categories_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this category.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/coupons/:
+    get:
+      operationId: api_coupons_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCouponList'
+          description: ''
+    post:
+      operationId: api_coupons_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: ''
+  /api/coupons/{id}/:
+    get:
+      operationId: api_coupons_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this coupon.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: ''
+    put:
+      operationId: api_coupons_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this coupon.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Coupon'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: ''
+    patch:
+      operationId: api_coupons_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this coupon.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCoupon'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCoupon'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCoupon'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coupon'
+          description: ''
+    delete:
+      operationId: api_coupons_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this coupon.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/dashboard/:
+    get:
+      operationId: api_dashboard_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dashboard'
+          description: ''
+  /api/dashboard/users/:
+    get:
+      operationId: api_dashboard_users_list
+      parameters:
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: role
+        schema:
+          type: string
+          enum:
+          - admin
+          - customer
+          - delivery_partner
+          - restaurant_owner
+        description: |-
+          * `customer` - Customer
+          * `restaurant_owner` - Restaurant Owner
+          * `delivery_partner` - Delivery Partner
+          * `admin` - Administrator
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminUserList'
+          description: ''
+    post:
+      operationId: api_dashboard_users_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminUser'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+  /api/dashboard/users/{id}/:
+    get:
+      operationId: api_dashboard_users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+    put:
+      operationId: api_dashboard_users_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminUser'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+    patch:
+      operationId: api_dashboard_users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUser'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+    delete:
+      operationId: api_dashboard_users_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/delivery/{id}/accept/:
+    post:
+      operationId: api_delivery_accept_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/delivery/assigned/:
+    get:
+      operationId: api_delivery_assigned_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+  /api/delivery/available/:
+    get:
+      operationId: api_delivery_available_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+  /api/delivery/earnings/:
+    get:
+      operationId: api_delivery_earnings_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Earnings'
+          description: ''
+  /api/delivery/profile/:
+    get:
+      operationId: api_delivery_profile_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPartner'
+          description: ''
+    put:
+      operationId: api_delivery_profile_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryPartner'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeliveryPartner'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeliveryPartner'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPartner'
+          description: ''
+    patch:
+      operationId: api_delivery_profile_partial_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDeliveryPartner'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDeliveryPartner'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDeliveryPartner'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryPartner'
+          description: ''
+  /api/favorites/:
+    get:
+      operationId: api_favorites_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFavoriteList'
+          description: ''
+    post:
+      operationId: api_favorites_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Favorite'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorite'
+          description: ''
+  /api/favorites/{id}/:
+    get:
+      operationId: api_favorites_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this favorite.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorite'
+          description: ''
+    delete:
+      operationId: api_favorites_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this favorite.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/foods/:
+    get:
+      operationId: api_foods_list
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: integer
+      - in: query
+        name: is_available
+        schema:
+          type: boolean
+      - in: query
+        name: is_vegetarian
+        schema:
+          type: boolean
+      - in: query
+        name: max_price
+        schema:
+          type: number
+      - in: query
+        name: min_price
+        schema:
+          type: number
+      - in: query
+        name: min_rating
+        schema:
+          type: number
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: restaurant
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: vegetarian
+        schema:
+          type: boolean
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFoodItemList'
+          description: ''
+    post:
+      operationId: api_foods_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FoodItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FoodItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FoodItem'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItem'
+          description: ''
+  /api/foods/{id}/:
+    get:
+      operationId: api_foods_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this food item.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItem'
+          description: ''
+    put:
+      operationId: api_foods_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this food item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FoodItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FoodItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FoodItem'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItem'
+          description: ''
+    patch:
+      operationId: api_foods_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this food item.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFoodItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFoodItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFoodItem'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FoodItem'
+          description: ''
+    delete:
+      operationId: api_foods_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this food item.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/notifications/:
+    get:
+      operationId: api_notifications_list
+      parameters:
+      - in: query
+        name: is_read
+        schema:
+          type: boolean
+      - in: query
+        name: notification_type
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNotificationList'
+          description: ''
+  /api/notifications/{id}/:
+    get:
+      operationId: api_notifications_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    put:
+      operationId: api_notifications_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    patch:
+      operationId: api_notifications_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/{id}/mark_read/:
+    post:
+      operationId: api_notifications_mark_read_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/notifications/mark_all_read/:
+    post:
+      operationId: api_notifications_mark_all_read_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /api/orders/:
+    get:
+      operationId: api_orders_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: payment_status
+        schema:
+          type: string
+      - in: query
+        name: restaurant
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - accepted
+          - assigned
+          - cancelled
+          - confirmed
+          - delivered
+          - on_the_way
+          - pending
+          - picked_up
+          - preparing
+          - ready
+          - rejected
+        description: |-
+          * `pending` - Pending
+          * `confirmed` - Confirmed
+          * `accepted` - Accepted
+          * `preparing` - Preparing
+          * `ready` - Ready for Pickup
+          * `assigned` - Assigned to Delivery Partner
+          * `picked_up` - Picked Up
+          * `on_the_way` - On the Way
+          * `delivered` - Delivered
+          * `cancelled` - Cancelled
+          * `rejected` - Rejected
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+    post:
+      operationId: api_orders_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreate'
+          description: ''
+  /api/orders/{id}/:
+    get:
+      operationId: api_orders_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/orders/{id}/cancel/:
+    post:
+      operationId: api_orders_cancel_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/orders/{id}/transition/:
+    post:
+      operationId: api_orders_transition_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this order.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/payments/:
+    get:
+      operationId: api_payments_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: payment_method
+        schema:
+          type: string
+          enum:
+          - cod
+          - online
+        description: |-
+          * `cod` - Cash on Delivery
+          * `online` - Mock Online Payment
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - failed
+          - pending
+          - refunded
+          - successful
+        description: |-
+          * `pending` - Pending
+          * `successful` - Successful
+          * `failed` - Failed
+          * `refunded` - Refunded
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPaymentList'
+          description: ''
+  /api/payments/{id}/:
+    get:
+      operationId: api_payments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this payment.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+  /api/payments/{id}/mock-checkout/:
+    post:
+      operationId: api_payments_mock_checkout_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+  /api/restaurants/:
+    get:
+      operationId: api_restaurants_list
+      parameters:
+      - in: query
+        name: city
+        schema:
+          type: string
+      - in: query
+        name: cuisine_type
+        schema:
+          type: string
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+      - in: query
+        name: max_delivery_fee
+        schema:
+          type: number
+      - in: query
+        name: max_delivery_time
+        schema:
+          type: integer
+      - in: query
+        name: max_minimum_order
+        schema:
+          type: number
+      - in: query
+        name: min_rating
+        schema:
+          type: number
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: vegetarian
+        schema:
+          type: boolean
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRestaurantList'
+          description: ''
+    post:
+      operationId: api_restaurants_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+          description: ''
+  /api/restaurants/{id}/:
+    get:
+      operationId: api_restaurants_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this restaurant.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+          description: ''
+    put:
+      operationId: api_restaurants_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this restaurant.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Restaurant'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+          description: ''
+    patch:
+      operationId: api_restaurants_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this restaurant.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurant'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurant'
+          description: ''
+    delete:
+      operationId: api_restaurants_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this restaurant.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/reviews/:
+    get:
+      operationId: api_reviews_list
+      parameters:
+      - in: query
+        name: customer
+        schema:
+          type: integer
+      - in: query
+        name: food_item
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: rating
+        schema:
+          type: integer
+      - in: query
+        name: restaurant
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReviewList'
+          description: ''
+    post:
+      operationId: api_reviews_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Review'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Review'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: ''
+  /api/reviews/{id}/:
+    get:
+      operationId: api_reviews_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: ''
+    put:
+      operationId: api_reviews_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Review'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Review'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: ''
+    patch:
+      operationId: api_reviews_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReview'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReview'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReview'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+          description: ''
+    delete:
+      operationId: api_reviews_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+components:
+  schemas:
+    AddCartItem:
+      type: object
+      properties:
+        food_item:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+          default: 1
+        replace:
+          type: boolean
+          default: false
+      required:
+      - food_item
+    Address:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        full_name:
+          type: string
+          maxLength: 120
+        phone:
+          type: string
+          maxLength: 20
+        house_number:
+          type: string
+          maxLength: 120
+        street:
+          type: string
+          maxLength: 255
+        landmark:
+          type: string
+          maxLength: 255
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 20
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        address_type:
+          $ref: '#/components/schemas/AddressTypeEnum'
+        is_default:
+          type: boolean
+      required:
+      - city
+      - full_name
+      - house_number
+      - id
+      - phone
+      - postal_code
+      - state
+      - street
+    AddressTypeEnum:
+      enum:
+      - home
+      - office
+      - other
+      type: string
+      description: |-
+        * `home` - Home
+        * `office` - Office
+        * `other` - Other
+    AdminUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          maxLength: 20
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - date_joined
+      - email
+      - id
+      - phone
+    ApplyCoupon:
+      type: object
+      properties:
+        code:
+          type: string
+      required:
+      - code
+    Cart:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        restaurant:
+          type: integer
+          nullable: true
+        coupon:
+          type: integer
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+          readOnly: true
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        tax:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        delivery_fee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - delivery_fee
+      - id
+      - items
+      - subtotal
+      - tax
+      - updated_at
+    CartItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        food_item:
+          type: integer
+        food:
+          allOf:
+          - $ref: '#/components/schemas/FoodItem'
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+      required:
+      - food
+      - food_item
+      - id
+      - subtotal
+      - unit_price
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+        is_active:
+          type: boolean
+        restaurant:
+          type: integer
+      required:
+      - id
+      - name
+      - restaurant
+    Coupon:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 30
+        description:
+          type: string
+        discount_type:
+          $ref: '#/components/schemas/DiscountTypeEnum'
+        discount_value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        minimum_order_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        maximum_discount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        start_date:
+          type: string
+          format: date-time
+        expiry_date:
+          type: string
+          format: date-time
+        usage_limit:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        per_user_limit:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        is_active:
+          type: boolean
+      required:
+      - code
+      - discount_type
+      - discount_value
+      - expiry_date
+      - id
+      - start_date
+    Dashboard:
+      type: object
+      properties:
+        data:
+          readOnly: true
+      required:
+      - data
+    DeliveryPartner:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        phone:
+          type: string
+          maxLength: 20
+        profile_photo:
+          type: string
+          format: uri
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleTypeEnum'
+        vehicle_number:
+          type: string
+          maxLength: 30
+        driving_license_number:
+          type: string
+          maxLength: 50
+        is_available:
+          type: boolean
+        current_latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        current_longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - driving_license_number
+      - email
+      - id
+      - phone
+      - rating
+      - user
+      - vehicle_number
+    DiscountTypeEnum:
+      enum:
+      - percentage
+      - fixed
+      type: string
+      description: |-
+        * `percentage` - Percentage
+        * `fixed` - Fixed Amount
+    Earnings:
+      type: object
+      properties:
+        completed_deliveries:
+          type: integer
+        total_earnings:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+      required:
+      - completed_deliveries
+      - total_earnings
+    Favorite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        restaurant:
+          type: integer
+        restaurant_detail:
+          allOf:
+          - $ref: '#/components/schemas/Restaurant'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - restaurant
+      - restaurant_detail
+    FoodItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        category_name:
+          type: string
+          readOnly: true
+        restaurant_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        discount_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        is_vegetarian:
+          type: boolean
+        is_available:
+          type: boolean
+        preparation_time:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+        popularity:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        restaurant:
+          type: integer
+        category:
+          type: integer
+      required:
+      - category
+      - category_name
+      - created_at
+      - id
+      - name
+      - original_price
+      - popularity
+      - price
+      - rating
+      - restaurant
+      - restaurant_name
+      - updated_at
+    ForgotPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    Logout:
+      type: object
+      properties:
+        refresh:
+          type: string
+      required:
+      - refresh
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        notification_type:
+          type: string
+          readOnly: true
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - message
+      - notification_type
+      - title
+      - user
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+          readOnly: true
+        status_events:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderStatusEvent'
+          readOnly: true
+        restaurant_name:
+          type: string
+          readOnly: true
+        status_label:
+          type: string
+          readOnly: true
+        order_number:
+          type: string
+          readOnly: true
+        delivery_address_snapshot:
+          readOnly: true
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        tax:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        delivery_fee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        discount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        grand_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        payment_method:
+          allOf:
+          - $ref: '#/components/schemas/PaymentMethod343Enum'
+          readOnly: true
+        payment_status:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusBaaEnum'
+          readOnly: true
+        customer_notes:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        accepted_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        prepared_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        picked_up_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        delivered_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        cancelled_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        customer:
+          type: integer
+          readOnly: true
+        restaurant:
+          type: integer
+          readOnly: true
+        delivery_partner:
+          type: integer
+          readOnly: true
+          nullable: true
+        delivery_address:
+          type: integer
+          readOnly: true
+          nullable: true
+        coupon:
+          type: integer
+          readOnly: true
+          nullable: true
+      required:
+      - accepted_at
+      - cancelled_at
+      - coupon
+      - created_at
+      - customer
+      - customer_notes
+      - delivered_at
+      - delivery_address
+      - delivery_address_snapshot
+      - delivery_fee
+      - delivery_partner
+      - discount
+      - grand_total
+      - id
+      - items
+      - order_number
+      - payment_method
+      - payment_status
+      - picked_up_at
+      - prepared_at
+      - restaurant
+      - restaurant_name
+      - status
+      - status_events
+      - status_label
+      - subtotal
+      - tax
+      - updated_at
+    OrderCreate:
+      type: object
+      properties:
+        delivery_address:
+          type: integer
+        payment_method:
+          $ref: '#/components/schemas/OrderCreatePaymentMethodEnum'
+        customer_notes:
+          type: string
+      required:
+      - delivery_address
+      - payment_method
+    OrderCreatePaymentMethodEnum:
+      enum:
+      - cod
+      - online
+      type: string
+      description: |-
+        * `cod` - cod
+        * `online` - online
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        food_name:
+          type: string
+          maxLength: 160
+        quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        order:
+          type: integer
+        food_item:
+          type: integer
+          nullable: true
+      required:
+      - food_name
+      - id
+      - order
+      - quantity
+      - subtotal
+      - unit_price
+    OrderStatusEvent:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusBaaEnum'
+        label:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - label
+      - status
+    PaginatedAddressList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+    PaginatedAdminUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminUser'
+    PaginatedCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PaginatedCouponList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coupon'
+    PaginatedFavoriteList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Favorite'
+    PaginatedFoodItemList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FoodItem'
+    PaginatedNotificationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+    PaginatedOrderList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    PaginatedPaymentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+    PaginatedRestaurantList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Restaurant'
+    PaginatedReviewList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Review'
+    PasswordChange:
+      type: object
+      properties:
+        old_password:
+          type: string
+        new_password:
+          type: string
+      required:
+      - new_password
+      - old_password
+    PatchedAddress:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        full_name:
+          type: string
+          maxLength: 120
+        phone:
+          type: string
+          maxLength: 20
+        house_number:
+          type: string
+          maxLength: 120
+        street:
+          type: string
+          maxLength: 255
+        landmark:
+          type: string
+          maxLength: 255
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 20
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        address_type:
+          $ref: '#/components/schemas/AddressTypeEnum'
+        is_default:
+          type: boolean
+    PatchedAdminUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          maxLength: 20
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+    PatchedCartItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        food_item:
+          type: integer
+        food:
+          allOf:
+          - $ref: '#/components/schemas/FoodItem'
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+    PatchedCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 120
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+        is_active:
+          type: boolean
+        restaurant:
+          type: integer
+    PatchedCoupon:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 30
+        description:
+          type: string
+        discount_type:
+          $ref: '#/components/schemas/DiscountTypeEnum'
+        discount_value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        minimum_order_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        maximum_discount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        start_date:
+          type: string
+          format: date-time
+        expiry_date:
+          type: string
+          format: date-time
+        usage_limit:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        per_user_limit:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        is_active:
+          type: boolean
+    PatchedDeliveryPartner:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        phone:
+          type: string
+          maxLength: 20
+        profile_photo:
+          type: string
+          format: uri
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleTypeEnum'
+        vehicle_number:
+          type: string
+          maxLength: 30
+        driving_license_number:
+          type: string
+          maxLength: 50
+        is_available:
+          type: boolean
+        current_latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        current_longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+    PatchedFoodItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+        category_name:
+          type: string
+          readOnly: true
+        restaurant_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+        description:
+          type: string
+        image:
+          type: string
+          format: uri
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        discount_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        is_vegetarian:
+          type: boolean
+        is_available:
+          type: boolean
+        preparation_time:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+        popularity:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        restaurant:
+          type: integer
+        category:
+          type: integer
+    PatchedNotification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        notification_type:
+          type: string
+          readOnly: true
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+    PatchedRestaurant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        is_open:
+          type: boolean
+          readOnly: true
+        is_favorite:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+        description:
+          type: string
+        logo:
+          type: string
+          format: uri
+        cover_image:
+          type: string
+          format: uri
+        phone:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        address:
+          type: string
+          maxLength: 255
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 20
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        cuisine_type:
+          type: string
+          maxLength: 120
+        opening_time:
+          type: string
+          format: time
+        closing_time:
+          type: string
+          format: time
+        minimum_order:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        delivery_fee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        estimated_delivery_time:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          description: Minutes
+        average_rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        owner:
+          type: integer
+          readOnly: true
+    PatchedReview:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        customer_name:
+          type: string
+          readOnly: true
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+        comment:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        customer:
+          type: integer
+          readOnly: true
+        restaurant:
+          type: integer
+        food_item:
+          type: integer
+          nullable: true
+        order:
+          type: integer
+    PatchedUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          maxLength: 20
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+        profile_image:
+          type: string
+          format: uri
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order_number:
+          type: string
+          readOnly: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        payment_method:
+          allOf:
+          - $ref: '#/components/schemas/PaymentMethod343Enum'
+          readOnly: true
+        transaction_id:
+          type: string
+          readOnly: true
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PaymentStatusEnum'
+          readOnly: true
+        payment_date:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        order:
+          type: integer
+          readOnly: true
+        customer:
+          type: integer
+          readOnly: true
+      required:
+      - amount
+      - customer
+      - id
+      - order
+      - order_number
+      - payment_date
+      - payment_method
+      - status
+      - transaction_id
+    PaymentMethod343Enum:
+      enum:
+      - cod
+      - online
+      type: string
+      description: |-
+        * `cod` - Cash on Delivery
+        * `online` - Mock Online Payment
+    PaymentStatusEnum:
+      enum:
+      - pending
+      - successful
+      - failed
+      - refunded
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `successful` - Successful
+        * `failed` - Failed
+        * `refunded` - Refunded
+    Registration:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          maxLength: 20
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        password:
+          type: string
+          writeOnly: true
+        confirm_password:
+          type: string
+          writeOnly: true
+      required:
+      - confirm_password
+      - email
+      - id
+      - password
+      - phone
+    Restaurant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        is_open:
+          type: boolean
+          readOnly: true
+        is_favorite:
+          type: boolean
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+        description:
+          type: string
+        logo:
+          type: string
+          format: uri
+        cover_image:
+          type: string
+          format: uri
+        phone:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        address:
+          type: string
+          maxLength: 255
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        postal_code:
+          type: string
+          maxLength: 20
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,7})?$
+          nullable: true
+        cuisine_type:
+          type: string
+          maxLength: 120
+        opening_time:
+          type: string
+          format: time
+        closing_time:
+          type: string
+          format: time
+        minimum_order:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        delivery_fee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        estimated_delivery_time:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          description: Minutes
+        average_rating:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        owner:
+          type: integer
+          readOnly: true
+      required:
+      - address
+      - average_rating
+      - city
+      - closing_time
+      - created_at
+      - cuisine_type
+      - email
+      - id
+      - is_favorite
+      - is_open
+      - name
+      - opening_time
+      - owner
+      - phone
+      - postal_code
+      - state
+      - updated_at
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        customer_name:
+          type: string
+          readOnly: true
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+        comment:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        customer:
+          type: integer
+          readOnly: true
+        restaurant:
+          type: integer
+        food_item:
+          type: integer
+          nullable: true
+        order:
+          type: integer
+      required:
+      - created_at
+      - customer
+      - customer_name
+      - id
+      - order
+      - rating
+      - restaurant
+      - updated_at
+    RoleEnum:
+      enum:
+      - customer
+      - restaurant_owner
+      - delivery_partner
+      - admin
+      type: string
+      description: |-
+        * `customer` - Customer
+        * `restaurant_owner` - Restaurant Owner
+        * `delivery_partner` - Delivery Partner
+        * `admin` - Administrator
+    StatusBaaEnum:
+      enum:
+      - pending
+      - confirmed
+      - accepted
+      - preparing
+      - ready
+      - assigned
+      - picked_up
+      - on_the_way
+      - delivered
+      - cancelled
+      - rejected
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `confirmed` - Confirmed
+        * `accepted` - Accepted
+        * `preparing` - Preparing
+        * `ready` - Ready for Pickup
+        * `assigned` - Assigned to Delivery Partner
+        * `picked_up` - Picked Up
+        * `on_the_way` - On the Way
+        * `delivered` - Delivered
+        * `cancelled` - Cancelled
+        * `rejected` - Rejected
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone:
+          type: string
+          maxLength: 20
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+        profile_image:
+          type: string
+          format: uri
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - date_joined
+      - email
+      - id
+      - is_active
+      - phone
+      - role
+    VehicleTypeEnum:
+      enum:
+      - bike
+      - scooter
+      - bicycle
+      type: string
+      description: |-
+        * `bike` - Bike
+        * `scooter` - Scooter
+        * `bicycle` - Bicycle
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
