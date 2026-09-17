@@ -2,3 +2,16 @@ __pycache__/
 results/
 inventory.ini
 *.retry
+.env
+venv/
+.venv/
+*.py[cod]
+*.log
+backend/media/
+backend/staticfiles/
+frontend/node_modules/
+frontend/dist/
+.idea/
+.vscode/
+.angular/
+coverage/
