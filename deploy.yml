@@ -1,0 +1,60 @@
+---
+- name: Jenkins Ansible deployment over native Linux SSM
+  hosts: targets
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Install Docker
+      ansible.builtin.dnf:
+        name: docker
+        state: present
+    - name: Enable Docker
+      ansible.builtin.systemd:
+        name: docker
+        enabled: true
+        state: started
+    - name: Download private image artifact for registry-independent verification
+      ansible.builtin.get_url:
+        url: "{{ lookup('env', 'IMAGE_URL') }}"
+        dest: /var/tmp/jenkins-image.tar
+        mode: '0600'
+      no_log: true
+      when: image_transport == 's3'
+    - name: Load private image artifact
+      ansible.builtin.shell: docker load -i /var/tmp/jenkins-image.tar && rm -f /var/tmp/jenkins-image.tar
+      when: image_transport == 's3'
+    - name: Pull verified image with temporary credentials and deploy hardened container
+      ansible.builtin.shell: |
+        set -eu
+        export DOCKER_CONFIG=$(mktemp -d)
+        trap 'rm -rf "$DOCKER_CONFIG"' EXIT
+        if [ '{{ image_transport }}' = registry ]; then
+          printf '%s' "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin >/dev/null 2>&1
+          docker pull '{{ image_digest }}'
+        fi
+        docker rm -f jenkins-lab-app 2>/dev/null || true
+        docker run -d --name jenkins-lab-app --restart unless-stopped --read-only \
+          --cap-drop ALL --security-opt no-new-privileges --memory 128m --cpus 0.5 \
+          --label lab=jenkins-projects-1-5 -p '{{ private_ip }}:8081:8081' '{{ image_digest }}'
+      args:
+        executable: /bin/bash
+      environment:
+        REGISTRY_USER: "{{ lookup('env', 'HUB_USER') }}"
+        REGISTRY_PASSWORD: "{{ lookup('env', 'HUB_PASSWORD') }}"
+      no_log: true
+    - name: Verify the deployed application reports the pushed commit
+      ansible.builtin.uri:
+        url: "http://{{ private_ip }}:8081/"
+        return_content: true
+      register: live
+      retries: 20
+      delay: 2
+      until: live.status == 200
+    - name: Assert exact commit
+      ansible.builtin.assert:
+        that:
+          - live.json.commit == expected_commit
+          - live.json.application == 'Jenkins CI/CD Lab'
+    - name: Show live verification
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} {{ live.json }}"
