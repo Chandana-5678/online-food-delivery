@@ -1,1 +1,1 @@
-v6-ssm-policy-fix
+v7-registry-ci
