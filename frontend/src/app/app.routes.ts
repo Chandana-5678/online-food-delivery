@@ -29,7 +29,7 @@ import { AdminDashboardComponent } from './admin/dashboard';
 import { AdminManagementComponent } from './admin/management';
 
 export const routes: Routes = [
-  {path:'',component:HomeComponent,title:'FoodFlow — Food delivered with care'},
+  {path:'',component:HomeComponent,title:'FoodFlow – Online Food Delivery'},
   {path:'restaurants',component:RestaurantsComponent,title:'Restaurants'}, {path:'restaurants/:id',component:RestaurantDetailComponent,title:'Restaurant menu'},
   {path:'foods/:id',redirectTo:'restaurants'},
   {path:'about',component:InfoComponent,data:{title:'About FoodFlow',text:'Better local food delivery, built around clarity and care.'}},
